@@ -1,0 +1,43 @@
+button {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  font: inherit;
+  border: 1px solid #012714;
+  border-radius: 2px;
+  color: #012714;
+  cursor: pointer;
+  height: 40px;
+}
+button:hover,
+button:active {
+  background-color: #012714;
+  color: beige;
+}
+.search-bar {
+  display: flex;
+  margin: 2rem;
+}
+.search-bar input {
+  height: 36px;
+  border: 1px solid #012714;
+  border-radius: 7px;
+  font: inherit;
+  width: 100%;
+  margin-right: 0.2rem;
+  padding-left: 10px;
+}
+
+.container-search-bar {
+  width: 30rem;
+  max-width: 90%;
+  margin: auto;
+}
+.find-movie {
+  width: 26rem;
+  max-width: 90%;
+  margin: auto;
+  color: aliceblue;
+  margin-bottom: -23px;
+  margin-top: 25px;
+}
