@@ -4,7 +4,8 @@ import axios from "axios";
 class CitiesList extends Component {
   state = {
     topCities: [],
-    cities: []
+    cities: [],
+    topDestination: []
   };
   componentDidMount = () => {
     axios.get("https://api.comparatrip.eu/cities/popular/5 ").then(res => {
@@ -27,6 +28,14 @@ class CitiesList extends Component {
         });
     } else {
       this.setState({ cities: [] });
+      axios
+        .get(
+          `https://api.comparatrip.eu/cities/popular/from/${this.state.cities.unique_name}/5`
+        )
+        .then(res => {
+          this.setState({ topDestination: res.data });
+          console.log(this.state.topDestination);
+        });
     }
   };
   returnCities = (cities, topCities) => {

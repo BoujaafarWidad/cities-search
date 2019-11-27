@@ -6,6 +6,9 @@ class SearchBar extends Component {
     term: "",
     cities: []
   };
+  // componentWillUpdate = (nextProps, nextState) => {
+  //   this.setState({ term: nextProps.cityName });
+  // };
   onInputChange(term) {
     this.setState({ term }, () => {
       document.body.dispatchEvent(
@@ -28,6 +31,7 @@ class SearchBar extends Component {
                 placeholder="search ..."
                 onChange={event => this.onInputChange(event.target.value)}
                 name="search"
+                value={this.props.cityName || this.state.term}
               />
             </div>
           </div>

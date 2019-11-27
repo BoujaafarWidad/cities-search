@@ -4,13 +4,15 @@ import CitiesList from "./CitiesList/CitiesList";
 
 class App extends Component {
   state = {
-    term: ""
+    departure: "",
+    arrival: ""
   };
-  _handleCityClicked = term => {
-    this.setState({ term });
+  _handleCityClicked = (city, departure) => {
+    departure
+      ? this.setState({ departure: city })
+      : this.setState({ arrival: city });
   };
   render() {
-    console.log(this.state.term);
     return (
       <div className="App">
         <div
@@ -19,8 +21,8 @@ class App extends Component {
         >
           Quel est votre trajet ?
         </div>
-        <SearchBar cityName={this.state.term}/>
-        <SearchBar cityName={this.state.term}/>
+        <SearchBar cityName={this.state.departure} departure />
+        <SearchBar cityName={this.state.arrival} />
         <CitiesList cityClicked={this._handleCityClicked} />
       </div>
     );
