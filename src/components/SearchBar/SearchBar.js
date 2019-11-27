@@ -9,15 +9,9 @@ class SearchBar extends Component {
   // componentWillUpdate = (nextProps, nextState) => {
   //   this.setState({ term: nextProps.cityName });
   // };
-  onInputChange(term) {
-    this.setState({ term }, () => {
-      document.body.dispatchEvent(
-        new CustomEvent("fetchSearchCities", {
-          detail: term
-        })
-      );
-    });
-  }
+  handleOnInputChange = term => {
+    this.props.onInputChange(term);
+  };
   _handleSubmit = e => {
     e.preventDefault();
   };
@@ -28,10 +22,11 @@ class SearchBar extends Component {
           <div className="container-search-bar">
             <div className="search-bar">
               <input
+                onFocus={this.props.onFocus}
                 placeholder="search ..."
-                onChange={event => this.onInputChange(event.target.value)}
+                onChange={event => this.handleOnInputChange(event.target.value)}
                 name="search"
-                value={this.props.cityName || this.state.term}
+                value={this.props.value}
               />
             </div>
           </div>

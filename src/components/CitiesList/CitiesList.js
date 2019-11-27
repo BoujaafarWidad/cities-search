@@ -4,19 +4,49 @@ import axios from "axios";
 class CitiesList extends Component {
   state = {
     topCities: [],
-    cities: [],
-    topDestination: []
+    cities: []
   };
   componentDidMount = () => {
     axios.get("https://api.comparatrip.eu/cities/popular/5 ").then(res => {
       this.setState({ topCities: res.data });
     });
-    document.body.addEventListener("fetchSearchCities", this._updateCities);
-  };
-  componentWillUnmount = () => {
-    document.body.removeEventListener("fetchSearchCities", this._updateCities);
+    document.body.addEventListener(
+      "fetchDepartureSearchCities",
+      this._updateCities
+    );
+    document.body.addEventListener(
+      "fetchArrivalSearchCities",
+      this._updateCities
+    );
+    document.body.addEventListener(
+      "fetchArrivalSuggestions",
+      this.suggestCities
+    );
   };
 
+  componentWillUnmount = () => {
+    document.body.removeEventListener(
+      "fetchDepartureSearchCities",
+      this._updateCities
+    );
+    document.body.removeEventListener(
+      "fetchArrivalSearchCities",
+      this._updateCities
+    );
+    document.body.removeEventListener(
+      "fetchArrivalSuggestions",
+      this.suggestCities
+    );
+  };
+  suggestCities = event => {
+    axios
+      .get(
+        `https://api.comparatrip.eu/cities/popular/from/${event.detail.departure}/5`
+      )
+      .then(res => {
+        this.setState({ cities: res.data });
+      });
+  };
   _updateCities = event => {
     if (event.detail) {
       axios
@@ -28,19 +58,11 @@ class CitiesList extends Component {
         });
     } else {
       this.setState({ cities: [] });
-      axios
-        .get(
-          `https://api.comparatrip.eu/cities/popular/from/${this.state.cities.unique_name}/5`
-        )
-        .then(res => {
-          this.setState({ topDestination: res.data });
-          console.log(this.state.topDestination);
-        });
     }
   };
   returnCities = (cities, topCities) => {
     let citiesShown = !cities.length ? topCities : cities;
-    return citiesShown.map((item, key) => {
+    return citiesShown.slice(0, 5).map((item, key) => {
       return (
         <li
           className="list-group-item"
@@ -58,7 +80,6 @@ class CitiesList extends Component {
     this.props.cityClicked(name);
   };
   render() {
-    console.log(this.state.cities);
     return (
       <div className="mx-auto" style={{ width: "415px", cursor: "pointer" }}>
         <ul className="list-group">

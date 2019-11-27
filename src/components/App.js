@@ -5,13 +5,45 @@ import CitiesList from "./CitiesList/CitiesList";
 class App extends Component {
   state = {
     departure: "",
-    arrival: ""
+    arrival: "",
+    inDeparture: true
   };
-  _handleCityClicked = (city, departure) => {
-    departure
+  _onDepartureInputChange = term => {
+    this.setState({ departure: term, inDeparture: true }, () => {
+      document.body.dispatchEvent(
+        new CustomEvent("fetchDepartureSearchCities", {
+          detail: term
+        })
+      );
+    });
+  };
+  _onArrivalInputChange = term => {
+    this.setState({ arrival: term, inDeparture: false }, () => {
+      document.body.dispatchEvent(
+        new CustomEvent("fetchArrivalSearchCities", {
+          detail: term
+        })
+      );
+    });
+  };
+  handleDepartureOnFocus = () => {
+    this.setState({ inDeparture: true });
+  };
+  handleArrivalOnFocus = () => {
+    this.setState({ inDeparture: false }, () => {
+      document.body.dispatchEvent(
+        new CustomEvent("fetchArrivalSuggestions", {
+          detail: { departure: this.state.departure }
+        })
+      );
+    });
+  };
+  _handleCityClicked = city => {
+    this.state.inDeparture
       ? this.setState({ departure: city })
       : this.setState({ arrival: city });
   };
+
   render() {
     return (
       <div className="App">
@@ -21,9 +53,21 @@ class App extends Component {
         >
           Quel est votre trajet ?
         </div>
-        <SearchBar cityName={this.state.departure} departure />
-        <SearchBar cityName={this.state.arrival} />
-        <CitiesList cityClicked={this._handleCityClicked} />
+        <SearchBar
+          onFocus={this.handleDepartureOnFocus}
+          onInputChange={this._onDepartureInputChange}
+          value={this.state.departure}
+        />
+        <SearchBar
+          onFocus={this.handleArrivalOnFocus}
+          onInputChange={this._onArrivalInputChange}
+          value={this.state.arrival}
+        />
+        <CitiesList
+          inDeparture={this.state.inDeparture}
+          departure={this.state.departure}
+          cityClicked={this._handleCityClicked}
+        />
       </div>
     );
   }
